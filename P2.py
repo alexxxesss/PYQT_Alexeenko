@@ -50,7 +50,7 @@ class MyWidgetsForm(QtWidgets.QWidget):
 
         program_height = self.height()
 
-        self.move(0, screen_height - program_height)
+        self.move(0, screen_height - program_height - 72)
 
     def onPBRBClicked(self):
         screen_width = QtWidgets.QApplication.screenAt(self.pos()).size().width()
@@ -59,7 +59,7 @@ class MyWidgetsForm(QtWidgets.QWidget):
         program_width = self.width()
         program_height = self.height()
 
-        self.move(screen_width - program_width, screen_height - program_height)
+        self.move(screen_width - program_width, screen_height - program_height - 72)
 
     def onPBGetMonitorInfo(self):
         self.ui.plainTextEdit.appendPlainText("*" * 15)
@@ -103,6 +103,18 @@ class MyWidgetsForm(QtWidgets.QWidget):
 
             if self.isHidden():
                 self.ui.plainTextEdit.appendPlainText(f"{time.ctime()}: Окно прятано")
+
+    def moveEvent(self, event: QtGui.QMoveEvent) -> None:
+        print(self.pos().x(), self.pos().y())
+
+    def resizeEvent(self, event: QtGui.QResizeEvent) -> None:
+        print(self.size())
+
+    def keyPressEvent(self, event: QtGui.QKeyEvent) -> None:
+        print(event.text())
+
+    def change(self):
+        pass
 
     # def event(self, event: QtCore.QEvent) -> bool:
     #     if event.type() == QtCore.QEvent.Move:
