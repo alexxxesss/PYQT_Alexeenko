@@ -26,10 +26,13 @@ class MyWidgetsForm(QtWidgets.QWidget):
         self.ui.pushButton_4.clicked.connect(self.onPBLBClicked)
         self.ui.pushButton_5.clicked.connect(self.onPBRBClicked)
 
+        self.ui.pushButton_6.clicked.connect(self.onPBGetMonitorInfo)
+
         self.ui.dial.valueChanged.connect(self.showLCD)
         self.ui.horizontalSlider.valueChanged.connect(self.showLCD)
 
-        self.ui.pushButton_6.clicked.connect(self.onPBGetMonitorInfo)
+        self.ui.comboBox.addItems(["HEX", "DEC", "OCT", "BIN"])
+        self.ui.comboBox.currentIndexChanged.connect(self.changeLCDview)
 
         self.ui.dial.installEventFilter(self)
 
@@ -151,6 +154,17 @@ class MyWidgetsForm(QtWidgets.QWidget):
             self.ui.dial.setValue(value)
 
         self.ui.lcdNumber.display(value)
+
+    def changeLCDview(self):
+
+        dict_LCD = {
+            "HEX": self.ui.lcdNumber.setHexMode,
+            "BIN": self.ui.lcdNumber.setBinMode,
+            "OCT": self.ui.lcdNumber.setOctMode,
+            "DEC": self.ui.lcdNumber.setDecMode
+        }
+
+        dict_LCD[self.ui.comboBox.currentText()]()
 
 
 if __name__ == "__main__":
