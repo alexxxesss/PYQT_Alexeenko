@@ -1,6 +1,7 @@
 import time
 
 from PySide6 import QtCore, QtWidgets, QtGui
+
 from ui.P2_practice import Ui_Form
 
 
@@ -25,7 +26,12 @@ class MyWidgetsForm(QtWidgets.QWidget):
         self.ui.pushButton_4.clicked.connect(self.onPBLBClicked)
         self.ui.pushButton_5.clicked.connect(self.onPBRBClicked)
 
+        self.ui.dial.valueChanged.connect(self.showLCD)
+        self.ui.horizontalSlider.valueChanged.connect(self.showLCD)
+
         self.ui.pushButton_6.clicked.connect(self.onPBGetMonitorInfo)
+
+        self.ui.dial.installEventFilter(self)
 
     def onPBLTClicked(self):
         self.move(0, 0)
@@ -116,11 +122,35 @@ class MyWidgetsForm(QtWidgets.QWidget):
     def change(self):
         pass
 
-    # def event(self, event: QtCore.QEvent) -> bool:
-    #     if event.type() == QtCore.QEvent.Move:
-    #         print(event.pos().x(), event.pos().y())
-    #
-    #     return QtWidgets.QWidget.event(self, event)
+    def event(self, event: QtCore.QEvent) -> bool:
+        if event.type() == QtCore.QEvent.KeyPress:
+            print(f"{event.key()} is pressed")
+
+        return QtWidgets.QWidget.event(self, event)
+
+    def eventFilter(self, watched: QtCore.QObject, event: QtCore.QEvent) -> bool:
+
+        if watched == self.ui.dial and event.type() == QtCore.QEvent.KeyPress:
+            if event.text() == "+":
+                self.ui.dial.setValue(self.ui.dial.value() + 1)
+            if event.text() == "-":
+                self.ui.dial.setValue(self.ui.dial.value() - 1)
+
+            self.ui.plainTextEdit.appendPlainText(f"Новое значение мощности: {self.ui.dial.value()}")
+
+        return super(MyWidgetsForm, self).eventFilter(watched, event)
+
+    def showLCD(self):
+
+        if self.sender().objectName() == "dial":
+            value = self.ui.dial.value()
+            self.ui.horizontalSlider.setValue(value)
+
+        if self.sender().objectName() == "horizontalSlider":
+            value = self.ui.horizontalSlider.value()
+            self.ui.dial.setValue(value)
+
+        self.ui.lcdNumber.display(value)
 
 
 if __name__ == "__main__":
