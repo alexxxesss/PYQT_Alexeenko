@@ -27,6 +27,7 @@ class MyWidgetsForm(QtWidgets.QWidget):
         self.ui.pushButton_5.clicked.connect(self.onPBRBClicked)
 
         self.ui.pushButton_6.clicked.connect(self.onPBGetMonitorInfo)
+        self.ui.pushButton_6.setShortcut(QtGui.QKeySequence("F1"))
 
         self.ui.dial.valueChanged.connect(self.showLCD)
         self.ui.horizontalSlider.valueChanged.connect(self.showLCD)
@@ -165,6 +166,17 @@ class MyWidgetsForm(QtWidgets.QWidget):
         }
 
         dict_LCD[self.ui.comboBox.currentText()]()
+
+    def closeEvent(self, event):
+        reply = QtWidgets.QMessageBox.question(self, "Закрыть окно",
+                                                     "Вы хотите закрыть окно?",
+                                                     QtWidgets.QMessageBox.Yes | QtWidgets.QMessageBox.No,
+                                                     QtWidgets.QMessageBox.No)
+
+        if reply == QtWidgets.QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
 
 
 if __name__ == "__main__":
