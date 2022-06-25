@@ -53,8 +53,12 @@ class MyApp(QtWidgets.QWidget):
     # pushButtonStart clots
 
     def onPushButtonStartClicked(self):
-        self.timerThread.timerCount = int(self.lineEditStart.text())
-        self.timerThread.start()
+        try:
+            self.timerThread.timerCount = int(self.lineEditStart.text())
+            self.timerThread.start()
+        except ValueError:
+            self.lineEditStart.setText("")
+            QtWidgets.QMessageBox.warning(self, "Ошибка", "Таймер поддерживает только целочисленные значения!")
 
 
 class TimerThread(QtCore.QThread):
