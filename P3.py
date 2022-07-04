@@ -24,6 +24,8 @@ class MyApp(QtWidgets.QWidget):
     def initUi(self):
         self.setFixedSize(300, 200)
 
+        self.
+
         self.lineEditStart = QtWidgets.QLineEdit()
         self.lineEditStart.setPlaceholderText("Введите количество секунд")
 
