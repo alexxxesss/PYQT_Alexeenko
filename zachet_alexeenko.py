@@ -18,20 +18,39 @@ class DjangoWebQt(QtWidgets.QWidget):
 
         self.initUi()
 
-        self.child_window = Login()
-
     def initUi(self):
         self.setWindowTitle("Работа с БД через API")
         self.setFixedSize(965, 600)
+        self.child_window = Login()
         self.ui.get_all_todo.clicked.connect(self.getAllToDo)
         self.ui.pushButtonLogin.clicked.connect(self.onPushButtonLogin)
+        self.ui.pushButtonLogOut.clicked.connect(self.onPushButtonLogOut)
         self.ui.comboBox.addItems(['Активно', 'Отложено', 'Выполнено'])
         self.ui.create_todo.clicked.connect(self.postToDo)
+        self.child_window.user[str].connect(self.setUserName)
+        self.ui.pushButtonLogOut.setEnabled(False)
+
+    def onPushButtonLogOut(self):
+        reply = QtWidgets.QMessageBox.question(self,
+                                               'Выход', 'Вы действительно хотите выйти?',
+                                               QtWidgets.QMessageBox.Yes,
+                                               QtWidgets.QMessageBox.No)
+        if reply == QtWidgets.QMessageBox.Yes:
+            self.ui.lineEdit_user.clear()
+            self.child_window.token = None
+            self.ui.pushButtonLogOut.setEnabled(False)
+            self.ui.pushButtonLogin.setEnabled(True)
+
+    def setUserName(self, user):
+        self.ui.lineEdit_user.setText(user)
+        self.ui.pushButtonLogOut.setEnabled(True)
+        self.ui.pushButtonLogin.setEnabled(False)
 
     def getAllToDo(self):
-        resp = requests.get(f"{self.url}/api/v1/todo/")
+        print(Login.token)
+        resp = requests.get(f"{self.url}/api/v1/todo/", headers={'Authorization': "token {}".format(Login.token)})
+        print(resp)
         list_todo = resp.json()
-        new_list_todo = []
         self.ui.plainTextEdit.setPlainText(str(list_todo))
 
         headers = [
@@ -92,6 +111,15 @@ class DjangoWebQt(QtWidgets.QWidget):
             deadline=deadline
         )
         print(dict_todo)
+        print(Login.token)
+
+        request = requests.post(
+            f"{self.url}/api/v1/todo/",
+            json=dict_todo,
+            headers={'Authorization': "token {}".format(Login.token)}
+        )
+
+        print(request)
 
     def onPushButtonLogin(self):
         self.child_window.show()
@@ -108,6 +136,9 @@ class DjangoWebQt(QtWidgets.QWidget):
 
 
 class Login(QtWidgets.QWidget):
+    token = None
+    user = QtCore.Signal(str)
+
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -115,6 +146,7 @@ class Login(QtWidgets.QWidget):
         self.ui.setupUi(self)
 
         self.initUi()
+        self.dict_login = {}
 
     def initUi(self):
         self.setWindowTitle("Авторизация")
@@ -129,6 +161,8 @@ class Login(QtWidgets.QWidget):
 
         if request.status_code == 200:
             QtWidgets.QMessageBox.warning(self, "Поздравляем", "Вы вошли в систему!")
+            Login.token = request.json()['token']
+            self.user.emit(self.dict_login["username"])
             self.close()
         else:
             QtWidgets.QMessageBox.warning(self, "Внимание", "Данные введены неправильно!")

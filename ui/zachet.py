@@ -28,10 +28,37 @@ class Ui_Form(object):
         Form.resize(606, 535)
         self.gridLayout = QGridLayout(Form)
         self.gridLayout.setObjectName(u"gridLayout")
+        self.verticalLayout_3 = QVBoxLayout()
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.horizontalLayout_7 = QHBoxLayout()
+        self.horizontalLayout_7.setObjectName(u"horizontalLayout_7")
         self.pushButtonLogin = QPushButton(Form)
         self.pushButtonLogin.setObjectName(u"pushButtonLogin")
+        self.pushButtonLogin.setMinimumSize(QSize(120, 24))
 
-        self.gridLayout.addWidget(self.pushButtonLogin, 0, 1, 1, 1)
+        self.horizontalLayout_7.addWidget(self.pushButtonLogin)
+
+        self.label_7 = QLabel(Form)
+        self.label_7.setObjectName(u"label_7")
+        self.label_7.setMinimumSize(QSize(90, 24))
+
+        self.horizontalLayout_7.addWidget(self.label_7)
+
+        self.lineEdit_user = QLineEdit(Form)
+        self.lineEdit_user.setObjectName(u"lineEdit_user")
+        self.lineEdit_user.setMinimumSize(QSize(120, 24))
+        self.lineEdit_user.setReadOnly(True)
+
+        self.horizontalLayout_7.addWidget(self.lineEdit_user)
+
+        self.pushButtonLogOut = QPushButton(Form)
+        self.pushButtonLogOut.setObjectName(u"pushButtonLogOut")
+        self.pushButtonLogOut.setMinimumSize(QSize(120, 24))
+
+        self.horizontalLayout_7.addWidget(self.pushButtonLogOut)
+
+
+        self.verticalLayout_3.addLayout(self.horizontalLayout_7)
 
         self.tabWidget = QTabWidget(Form)
         self.tabWidget.setObjectName(u"tabWidget")
@@ -205,12 +232,15 @@ class Ui_Form(object):
         self.tab_4.setObjectName(u"tab_4")
         self.tabWidget.addTab(self.tab_4, "")
 
-        self.gridLayout.addWidget(self.tabWidget, 1, 1, 1, 1)
+        self.verticalLayout_3.addWidget(self.tabWidget)
+
+
+        self.gridLayout.addLayout(self.verticalLayout_3, 0, 0, 1, 1)
 
 
         self.retranslateUi(Form)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Form)
@@ -219,6 +249,8 @@ class Ui_Form(object):
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.pushButtonLogin.setText(QCoreApplication.translate("Form", u"\u0410\u0432\u0442\u043e\u0440\u0438\u0437\u043e\u0432\u0430\u0442\u044c\u0441\u044f", None))
+        self.label_7.setText(QCoreApplication.translate("Form", u"\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c: ", None))
+        self.pushButtonLogOut.setText(QCoreApplication.translate("Form", u"\u0412\u044b\u0439\u0442\u0438 \u0438\u0437 \u0430\u043a\u043a\u0430\u0443\u043d\u0442\u0430", None))
         self.get_all_todo.setText(QCoreApplication.translate("Form", u"\u041f\u043e\u043b\u0443\u0447\u0438\u0442\u044c \u0441\u043f\u0438\u0441\u043e\u043a \u0432\u0441\u0435\u0445 \u0434\u0435\u043b", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Form", u"\u0421\u043f\u0438\u0441\u043e\u043a \u0432\u0441\u0435\u0445 \u0434\u0435\u043b", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Form", u"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438", None))
