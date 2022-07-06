@@ -36,46 +36,68 @@ class DjangoWebQt(QtWidgets.QWidget):
                                                QtWidgets.QMessageBox.Yes,
                                                QtWidgets.QMessageBox.No)
         if reply == QtWidgets.QMessageBox.Yes:
-            self.ui.lineEdit_user.clear()
+            self.ui.label_user.clear()
             self.child_window.token = None
             self.ui.pushButtonLogOut.setEnabled(False)
             self.ui.pushButtonLogin.setEnabled(True)
+            self.ui.tableView.clearSpans()
 
     def setUserName(self, user):
-        self.ui.lineEdit_user.setText(user)
+        self.ui.label_user.setText(user)
         self.ui.pushButtonLogOut.setEnabled(True)
         self.ui.pushButtonLogin.setEnabled(False)
 
     def getAllToDo(self):
-        print(Login.token)
-        resp = requests.get(f"{self.url}/api/v1/todo/", headers={'Authorization': "token {}".format(Login.token)})
-        print(resp)
-        list_todo = resp.json()
-        self.ui.plainTextEdit.setPlainText(str(list_todo))
+        try:
+            resp = requests.get(
+                f"{self.url}/api/v1/todo/",
+                headers={'Authorization': "token {}".format(self.child_window.token)}
+            )
 
-        headers = [
-            "Автор",
-            "Название",
-            "Текст TODO",
-            "Публичная",
-            "Важная",
-            "Статус",
-            "Крайний срок",
-            "Дата создания",
-            "Дата обновления"
-        ]
-        stm = QtGui.QStandardItemModel()
-        stm.setHorizontalHeaderLabels(headers)
+            if resp.status_code == 200:
+                list_todo = resp.json()
+                headers = [
+                    "Автор",
+                    "Название",
+                    "Текст TODO",
+                    "Публичная",
+                    "Важная",
+                    "Статус",
+                    "Крайний срок",
+                    "Дата создания",
+                    "Дата обновления"
+                ]
+                stm = QtGui.QStandardItemModel()
+                stm.setHorizontalHeaderLabels(headers)
 
-        key_dict = []
-        for key in list_todo[0].keys():
-            key_dict.append(key)
+                key_dict = []
+                for key in list_todo[0].keys():
+                    key_dict.append(key)
 
-        for row in range(len(list_todo)):
-            for i in range(len(headers)):
-                stm.setItem(row, i, QtGui.QStandardItem(str(list_todo[row][key_dict[i]])))
+                for row in range(len(list_todo)):
+                    for i in range(len(headers)):
+                        stm.setItem(row, i, QtGui.QStandardItem(str(list_todo[row][key_dict[i]])))
 
-        self.ui.tableView.setModel(stm)
+                self.ui.tableView.setModel(stm)
+
+            if resp.status_code == 401:
+                QtWidgets.QMessageBox.warning(
+                    self,
+                    "Внимание", "Нужно авторизоваться в системе, чтобы получить список всех дел",
+                    QtWidgets.QMessageBox.Yes
+                )
+            else:
+                QtWidgets.QMessageBox.warning(
+                    self,
+                    "Внимание", "Что-то пошло не так, повторите попытку",
+                    QtWidgets.QMessageBox.Yes
+                )
+        except requests.exceptions.ConnectionError:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Внимание", "Нет соединения с сервером!",
+                QtWidgets.QMessageBox.Yes
+            )
 
     def postToDo(self):
 
@@ -110,16 +132,30 @@ class DjangoWebQt(QtWidgets.QWidget):
             status=status,
             deadline=deadline
         )
-        print(dict_todo)
-        print(Login.token)
+        try:
+            request = requests.post(
+                f"{self.url}/api/v1/todo/",
+                json=dict_todo,
+                headers={'Authorization': "token {}".format(self.child_window.token)}
+            )
+            print(request.status_code)
+            if request.status_code == 200:
+                QtWidgets.QMessageBox.warning(self, "Внимание", "Вы создали новое дело!", QtWidgets.QMessageBox.Yes)
+                self.ui.lineEdit.clear()
+                self.ui.textEdit.clear()
 
-        request = requests.post(
-            f"{self.url}/api/v1/todo/",
-            json=dict_todo,
-            headers={'Authorization': "token {}".format(Login.token)}
-        )
-
-        print(request)
+            if request.status_code == 401:
+                QtWidgets.QMessageBox.warning(
+                    self,
+                    "Внимание", "Дело не создано, нужно авторизоваться в системе!",
+                    QtWidgets.QMessageBox.Yes
+                )
+        except requests.exceptions.ConnectionError:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Внимание", "Нет соединения с сервером!",
+                QtWidgets.QMessageBox.Yes
+            )
 
     def onPushButtonLogin(self):
         self.child_window.show()
@@ -146,26 +182,33 @@ class Login(QtWidgets.QWidget):
         self.ui.setupUi(self)
 
         self.initUi()
-        self.dict_login = {}
 
     def initUi(self):
         self.setWindowTitle("Авторизация")
         self.ui.pushButtonLogin.clicked.connect(self.onPushButtonLogin)
+        # self.shortcut = QtGui.QShortcut(QtGui.QKeySequence("Enter"), self)
+        # self.shortcut.activated.connect(self.onPushButtonLogin)
 
     def onPushButtonLogin(self):
-        username = self.ui.lineEdit.text()
-        password = self.ui.lineEdit_2.text()
-        self.dict_login = dict(username=username, password=password)
+        try:
+            username = self.ui.lineEdit.text()
+            password = self.ui.lineEdit_2.text()
+            dict_login = dict(username=username, password=password)
+            request = requests.post(f"http://127.0.0.1:8000/api/v1/login/", json=dict_login)
 
-        request = requests.post(f"http://127.0.0.1:8000/api/v1/login/", json=self.dict_login)
-
-        if request.status_code == 200:
-            QtWidgets.QMessageBox.warning(self, "Поздравляем", "Вы вошли в систему!")
-            Login.token = request.json()['token']
-            self.user.emit(self.dict_login["username"])
-            self.close()
-        else:
-            QtWidgets.QMessageBox.warning(self, "Внимание", "Данные введены неправильно!")
+            if request.status_code == 200:
+                QtWidgets.QMessageBox.warning(self, "Поздравляем", "Вы вошли в систему!")
+                self.token = request.json()['token']
+                self.user.emit(dict_login["username"])
+                self.close()
+            else:
+                QtWidgets.QMessageBox.warning(self, "Внимание", "Данные введены неправильно!")
+        except requests.exceptions.ConnectionError:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Внимание", "Нет соединения с сервером!",
+                QtWidgets.QMessageBox.Yes
+            )
 
 
 if __name__ == "__main__":

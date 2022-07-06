@@ -41,15 +41,14 @@ class Ui_Form(object):
         self.label_7 = QLabel(Form)
         self.label_7.setObjectName(u"label_7")
         self.label_7.setMinimumSize(QSize(90, 24))
+        self.label_7.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
 
         self.horizontalLayout_7.addWidget(self.label_7)
 
-        self.lineEdit_user = QLineEdit(Form)
-        self.lineEdit_user.setObjectName(u"lineEdit_user")
-        self.lineEdit_user.setMinimumSize(QSize(120, 24))
-        self.lineEdit_user.setReadOnly(True)
+        self.label_user = QLabel(Form)
+        self.label_user.setObjectName(u"label_user")
 
-        self.horizontalLayout_7.addWidget(self.lineEdit_user)
+        self.horizontalLayout_7.addWidget(self.label_user)
 
         self.pushButtonLogOut = QPushButton(Form)
         self.pushButtonLogOut.setObjectName(u"pushButtonLogOut")
@@ -250,6 +249,7 @@ class Ui_Form(object):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.pushButtonLogin.setText(QCoreApplication.translate("Form", u"\u0410\u0432\u0442\u043e\u0440\u0438\u0437\u043e\u0432\u0430\u0442\u044c\u0441\u044f", None))
         self.label_7.setText(QCoreApplication.translate("Form", u"\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c: ", None))
+        self.label_user.setText("")
         self.pushButtonLogOut.setText(QCoreApplication.translate("Form", u"\u0412\u044b\u0439\u0442\u0438 \u0438\u0437 \u0430\u043a\u043a\u0430\u0443\u043d\u0442\u0430", None))
         self.get_all_todo.setText(QCoreApplication.translate("Form", u"\u041f\u043e\u043b\u0443\u0447\u0438\u0442\u044c \u0441\u043f\u0438\u0441\u043e\u043a \u0432\u0441\u0435\u0445 \u0434\u0435\u043b", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Form", u"\u0421\u043f\u0438\u0441\u043e\u043a \u0432\u0441\u0435\u0445 \u0434\u0435\u043b", None))

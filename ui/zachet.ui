@@ -42,18 +42,15 @@
          <property name="text">
           <string>Пользователь: </string>
          </property>
+         <property name="alignment">
+          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+         </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="lineEdit_user">
-         <property name="minimumSize">
-          <size>
-           <width>120</width>
-           <height>24</height>
-          </size>
-         </property>
-         <property name="readOnly">
-          <bool>true</bool>
+        <widget class="QLabel" name="label_user">
+         <property name="text">
+          <string/>
          </property>
         </widget>
        </item>
