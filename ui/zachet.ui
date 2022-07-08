@@ -140,17 +140,9 @@
              </item>
             </layout>
            </item>
-           <item>
-            <widget class="QPlainTextEdit" name="plainTextEdit"/>
-           </item>
           </layout>
          </item>
         </layout>
-       </widget>
-       <widget class="QWidget" name="tab_3">
-        <attribute name="title">
-         <string>Комментарии</string>
-        </attribute>
        </widget>
        <widget class="QWidget" name="tab_2">
         <attribute name="title">

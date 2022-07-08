@@ -17,9 +17,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDateTimeEdit,
     QGridLayout, QHBoxLayout, QHeaderView, QLabel,
-    QLineEdit, QPlainTextEdit, QPushButton, QSizePolicy,
-    QTabWidget, QTableView, QTextEdit, QVBoxLayout,
-    QWidget)
+    QLineEdit, QPushButton, QSizePolicy, QTabWidget,
+    QTableView, QTextEdit, QVBoxLayout, QWidget)
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -101,18 +100,10 @@ class Ui_Form(object):
 
         self.verticalLayout.addLayout(self.horizontalLayout_8)
 
-        self.plainTextEdit = QPlainTextEdit(self.tab)
-        self.plainTextEdit.setObjectName(u"plainTextEdit")
-
-        self.verticalLayout.addWidget(self.plainTextEdit)
-
 
         self.gridLayout_2.addLayout(self.verticalLayout, 0, 0, 1, 1)
 
         self.tabWidget.addTab(self.tab, "")
-        self.tab_3 = QWidget()
-        self.tab_3.setObjectName(u"tab_3")
-        self.tabWidget.addTab(self.tab_3, "")
         self.tab_2 = QWidget()
         self.tab_2.setObjectName(u"tab_2")
         self.verticalLayout_2 = QVBoxLayout(self.tab_2)
@@ -280,7 +271,6 @@ class Ui_Form(object):
         self.pushButtonPut.setText(QCoreApplication.translate("Form", u"\u0412\u043d\u0435\u0441\u0442\u0438 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u0438\u044f \u0432 \u0434\u0435\u043b\u043e", None))
         self.pushButtonDelete.setText(QCoreApplication.translate("Form", u"\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0434\u0435\u043b\u043e", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Form", u"\u0421\u043f\u0438\u0441\u043e\u043a \u0432\u0441\u0435\u0445 \u0434\u0435\u043b", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Form", u"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438", None))
         self.label.setText(QCoreApplication.translate("Form", u"\u0417\u0430\u0433\u043e\u043b\u043e\u0432\u043e\u043a", None))
         self.label_2.setText(QCoreApplication.translate("Form", u"\u0422\u0435\u043a\u0441\u0442 \u0437\u0430\u0434\u0430\u043d\u0438\u044f", None))
         self.label_3.setText(QCoreApplication.translate("Form", u"\u041f\u0443\u0431\u043b\u0438\u0447\u043d\u0430\u044f", None))
