@@ -13,6 +13,8 @@ class DjangoWebQt(QtWidgets.QWidget):
 
         self.ui = Ui_Form()
         self.ui.setupUi(self)
+        self.current_item = None
+        self.list_todo = None
 
         self.url = 'http://127.0.0.1:8000'
 
@@ -22,7 +24,7 @@ class DjangoWebQt(QtWidgets.QWidget):
         self.setWindowTitle("Работа с БД через API")
         self.setMinimumSize(965, 600)
         self.child_window = Login()
-        self.ui.pushButtonGet.clicked.connect(self.getAllToDo)
+        self.ui.pushButtonGet.clicked.connect(self.onPushButtonNoteGetAll)
         self.ui.pushButtonLogin.clicked.connect(self.onPushButtonLogin)
         self.ui.pushButtonLogOut.clicked.connect(self.onPushButtonLogOut)
         self.ui.comboBox.addItems(['Активно', 'Отложено', 'Выполнено'])
@@ -32,9 +34,23 @@ class DjangoWebQt(QtWidgets.QWidget):
         self.ui.pushButtonDetails.setEnabled(False)
         self.ui.pushButtonDelete.setEnabled(False)
         self.ui.pushButtonPut.setEnabled(False)
+        self.ui.tableView.clicked.connect(self.clicked_table)
+        self.ui.pushButtonDelete.clicked.connect(self.onPushButtonNoteDelete)
+
+    def clicked_table(self, item: QtCore.QModelIndex):
+        self.ui.pushButtonDelete.setEnabled(True)
+        self.ui.pushButtonDetails.setEnabled(True)
+        self.ui.pushButtonPut.setEnabled(True)
+        self.current_item = item.row()
+
+    def onPushButtonNoteDelete(self):
+
 
     def onPushButtonNoteDetail(self):
         ...
+
+    # def event(self, event:QtCore.QEvent) -> bool:
+    #     print(event.type())
 
     def onPushButtonLogOut(self):
         reply = QtWidgets.QMessageBox.question(self,
@@ -53,7 +69,7 @@ class DjangoWebQt(QtWidgets.QWidget):
         self.ui.pushButtonLogOut.setEnabled(True)
         self.ui.pushButtonLogin.setEnabled(False)
 
-    def getAllToDo(self):
+    def onPushButtonNoteGetAll(self):
         try:
             resp = requests.get(
                 f"{self.url}/api/v1/todo/",
@@ -62,16 +78,16 @@ class DjangoWebQt(QtWidgets.QWidget):
             self.ui.plainTextEdit.setPlainText(str(resp.status_code))
 
             if resp.status_code == 200:
-                list_todo = resp.json()
+                self.list_todo = resp.json()
                 headers = ["Автор", "Название", "Текст задания", "Крайний срок"]
                 stm = QtGui.QStandardItemModel()
                 stm.setHorizontalHeaderLabels(headers)
 
                 key_dict = ["author", "title", "message", "deadline"]
 
-                for row in range(len(list_todo)):
+                for row in range(len(self.list_todo)):
                     for i in range(len(headers)):
-                        stm.setItem(row, i, QtGui.QStandardItem(str(list_todo[row][key_dict[i]])))
+                        stm.setItem(row, i, QtGui.QStandardItem(str(self.list_todo[row][key_dict[i]])))
 
                 self.ui.tableView.setModel(stm)
 
@@ -181,8 +197,6 @@ class Login(QtWidgets.QWidget):
     def initUi(self):
         self.setWindowTitle("Авторизация")
         self.ui.pushButtonLogin.clicked.connect(self.onPushButtonLogin)
-        self.shortcut = QtGui.QShortcut(QtGui.QKeySequence("Enter"), self)
-        self.shortcut.activated.connect(self.onPushButtonLogin)
 
     def onPushButtonLogin(self):
         try:

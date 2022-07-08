@@ -121,7 +121,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>PushButton</string>
+                <string>Внести изменения в дело</string>
                </property>
               </widget>
              </item>
