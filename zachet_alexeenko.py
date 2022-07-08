@@ -1,7 +1,10 @@
+import time
+
 import requests
 
 from PySide6 import QtWidgets, QtCore, QtGui
 
+from ui import res
 from ui.zachet import Ui_Form
 from ui.login import Ui_FormLogin
 from ui.details import Ui_FormDetails
@@ -17,6 +20,9 @@ class DjangoWebQt(QtWidgets.QWidget):
         self.ui.setupUi(self)
         self.current_item = None
         self.list_todo = None
+
+        res.qInitResources()
+        self.setWindowIcon(QtGui.QIcon(QtGui.QPixmap(":/ico/icon.ico")))
 
         self.url = 'http://127.0.0.1:8000'
 
@@ -42,6 +48,14 @@ class DjangoWebQt(QtWidgets.QWidget):
         self.ui.pushButtonDetails.clicked.connect(self.onPushButtonNoteDetail)
         self.put_window = PutWindow()
         self.ui.pushButtonPut.clicked.connect(self.onPushButtonNotePut)
+        self.loadGUI()
+
+    def loadGUI(self):
+        splash = QtWidgets.QSplashScreen(QtGui.QPixmap(":/logo/load_gui.jpg").scaled(300, 300))
+        splash.show()
+        time.sleep(1)
+        splash.finish(self)
+        self.show()
 
     def clicked_table(self, item: QtCore.QModelIndex):
         self.ui.pushButtonDelete.setEnabled(True)
@@ -266,6 +280,9 @@ class Login(QtWidgets.QWidget):
         self.ui = Ui_FormLogin()
         self.ui.setupUi(self)
 
+        res.qInitResources()
+        self.setWindowIcon(QtGui.QIcon(QtGui.QPixmap(":/ico/icon.ico")))
+
         self.initUi()
 
     def initUi(self):
@@ -310,6 +327,9 @@ class DetailsWindow(QtWidgets.QWidget):
         self.ui = Ui_FormDetails()
         self.ui.setupUi(self)
 
+        res.qInitResources()
+        self.setWindowIcon(QtGui.QIcon(QtGui.QPixmap(":/ico/icon.ico")))
+
         self.initUi()
 
     def initUi(self):
@@ -328,6 +348,9 @@ class PutWindow(QtWidgets.QWidget):
         self.url = 'http://127.0.0.1:8000'
         self.current_id = None
         self.put_token = None
+
+        res.qInitResources()
+        self.setWindowIcon(QtGui.QIcon(QtGui.QPixmap(":/ico/icon.ico")))
 
         self.initUi()
 
