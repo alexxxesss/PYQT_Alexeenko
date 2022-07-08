@@ -60,6 +60,7 @@ class Ui_FormLogin(object):
         self.lineEdit_2 = QLineEdit(FormLogin)
         self.lineEdit_2.setObjectName(u"lineEdit_2")
         self.lineEdit_2.setMinimumSize(QSize(150, 22))
+        self.lineEdit_2.setEchoMode(QLineEdit.EchoMode.Password)
 
         self.horizontalLayout_2.addWidget(self.lineEdit_2)
 

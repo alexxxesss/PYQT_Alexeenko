@@ -85,11 +85,60 @@
             <widget class="QTableView" name="tableView"/>
            </item>
            <item>
-            <widget class="QPushButton" name="get_all_todo">
-             <property name="text">
-              <string>Получить список всех дел</string>
-             </property>
-            </widget>
+            <layout class="QHBoxLayout" name="horizontalLayout_8">
+             <item>
+              <widget class="QPushButton" name="pushButtonGet">
+               <property name="minimumSize">
+                <size>
+                 <width>160</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Получить список всех дел</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonDetails">
+               <property name="minimumSize">
+                <size>
+                 <width>140</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Показать подробности</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonPut">
+               <property name="minimumSize">
+                <size>
+                 <width>80</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>PushButton</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QPushButton" name="pushButtonDelete">
+               <property name="minimumSize">
+                <size>
+                 <width>90</width>
+                 <height>24</height>
+                </size>
+               </property>
+               <property name="text">
+                <string>Удалить дело</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
            </item>
            <item>
             <widget class="QPlainTextEdit" name="plainTextEdit"/>

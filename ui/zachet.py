@@ -72,10 +72,34 @@ class Ui_Form(object):
 
         self.verticalLayout.addWidget(self.tableView)
 
-        self.get_all_todo = QPushButton(self.tab)
-        self.get_all_todo.setObjectName(u"get_all_todo")
+        self.horizontalLayout_8 = QHBoxLayout()
+        self.horizontalLayout_8.setObjectName(u"horizontalLayout_8")
+        self.pushButtonGet = QPushButton(self.tab)
+        self.pushButtonGet.setObjectName(u"pushButtonGet")
+        self.pushButtonGet.setMinimumSize(QSize(160, 24))
 
-        self.verticalLayout.addWidget(self.get_all_todo)
+        self.horizontalLayout_8.addWidget(self.pushButtonGet)
+
+        self.pushButtonDetails = QPushButton(self.tab)
+        self.pushButtonDetails.setObjectName(u"pushButtonDetails")
+        self.pushButtonDetails.setMinimumSize(QSize(140, 24))
+
+        self.horizontalLayout_8.addWidget(self.pushButtonDetails)
+
+        self.pushButtonPut = QPushButton(self.tab)
+        self.pushButtonPut.setObjectName(u"pushButtonPut")
+        self.pushButtonPut.setMinimumSize(QSize(80, 24))
+
+        self.horizontalLayout_8.addWidget(self.pushButtonPut)
+
+        self.pushButtonDelete = QPushButton(self.tab)
+        self.pushButtonDelete.setObjectName(u"pushButtonDelete")
+        self.pushButtonDelete.setMinimumSize(QSize(90, 24))
+
+        self.horizontalLayout_8.addWidget(self.pushButtonDelete)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout_8)
 
         self.plainTextEdit = QPlainTextEdit(self.tab)
         self.plainTextEdit.setObjectName(u"plainTextEdit")
@@ -251,7 +275,10 @@ class Ui_Form(object):
         self.label_7.setText(QCoreApplication.translate("Form", u"\u041f\u043e\u043b\u044c\u0437\u043e\u0432\u0430\u0442\u0435\u043b\u044c: ", None))
         self.label_user.setText("")
         self.pushButtonLogOut.setText(QCoreApplication.translate("Form", u"\u0412\u044b\u0439\u0442\u0438 \u0438\u0437 \u0430\u043a\u043a\u0430\u0443\u043d\u0442\u0430", None))
-        self.get_all_todo.setText(QCoreApplication.translate("Form", u"\u041f\u043e\u043b\u0443\u0447\u0438\u0442\u044c \u0441\u043f\u0438\u0441\u043e\u043a \u0432\u0441\u0435\u0445 \u0434\u0435\u043b", None))
+        self.pushButtonGet.setText(QCoreApplication.translate("Form", u"\u041f\u043e\u043b\u0443\u0447\u0438\u0442\u044c \u0441\u043f\u0438\u0441\u043e\u043a \u0432\u0441\u0435\u0445 \u0434\u0435\u043b", None))
+        self.pushButtonDetails.setText(QCoreApplication.translate("Form", u"\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u044c \u043f\u043e\u0434\u0440\u043e\u0431\u043d\u043e\u0441\u0442\u0438", None))
+        self.pushButtonPut.setText(QCoreApplication.translate("Form", u"PushButton", None))
+        self.pushButtonDelete.setText(QCoreApplication.translate("Form", u"\u0423\u0434\u0430\u043b\u0438\u0442\u044c \u0434\u0435\u043b\u043e", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Form", u"\u0421\u043f\u0438\u0441\u043e\u043a \u0432\u0441\u0435\u0445 \u0434\u0435\u043b", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), QCoreApplication.translate("Form", u"\u041a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u0438", None))
         self.label.setText(QCoreApplication.translate("Form", u"\u0417\u0430\u0433\u043e\u043b\u043e\u0432\u043e\u043a", None))

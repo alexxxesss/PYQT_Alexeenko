@@ -20,15 +20,21 @@ class DjangoWebQt(QtWidgets.QWidget):
 
     def initUi(self):
         self.setWindowTitle("Работа с БД через API")
-        self.setFixedSize(965, 600)
+        self.setMinimumSize(965, 600)
         self.child_window = Login()
-        self.ui.get_all_todo.clicked.connect(self.getAllToDo)
+        self.ui.pushButtonGet.clicked.connect(self.getAllToDo)
         self.ui.pushButtonLogin.clicked.connect(self.onPushButtonLogin)
         self.ui.pushButtonLogOut.clicked.connect(self.onPushButtonLogOut)
         self.ui.comboBox.addItems(['Активно', 'Отложено', 'Выполнено'])
         self.ui.create_todo.clicked.connect(self.postToDo)
         self.child_window.user[str].connect(self.setUserName)
         self.ui.pushButtonLogOut.setEnabled(False)
+        self.ui.pushButtonDetails.setEnabled(False)
+        self.ui.pushButtonDelete.setEnabled(False)
+        self.ui.pushButtonPut.setEnabled(False)
+
+    def onPushButtonNoteDetail(self):
+        ...
 
     def onPushButtonLogOut(self):
         reply = QtWidgets.QMessageBox.question(self,
@@ -40,7 +46,7 @@ class DjangoWebQt(QtWidgets.QWidget):
             self.child_window.token = None
             self.ui.pushButtonLogOut.setEnabled(False)
             self.ui.pushButtonLogin.setEnabled(True)
-            self.ui.tableView.clearSpans()
+            self.ui.tableView.setModel(None)
 
     def setUserName(self, user):
         self.ui.label_user.setText(user)
@@ -53,26 +59,15 @@ class DjangoWebQt(QtWidgets.QWidget):
                 f"{self.url}/api/v1/todo/",
                 headers={'Authorization': "token {}".format(self.child_window.token)}
             )
+            self.ui.plainTextEdit.setPlainText(str(resp.status_code))
 
             if resp.status_code == 200:
                 list_todo = resp.json()
-                headers = [
-                    "Автор",
-                    "Название",
-                    "Текст TODO",
-                    "Публичная",
-                    "Важная",
-                    "Статус",
-                    "Крайний срок",
-                    "Дата создания",
-                    "Дата обновления"
-                ]
+                headers = ["Автор", "Название", "Текст задания", "Крайний срок"]
                 stm = QtGui.QStandardItemModel()
                 stm.setHorizontalHeaderLabels(headers)
 
-                key_dict = []
-                for key in list_todo[0].keys():
-                    key_dict.append(key)
+                key_dict = ["author", "title", "message", "deadline"]
 
                 for row in range(len(list_todo)):
                     for i in range(len(headers)):
@@ -80,7 +75,7 @@ class DjangoWebQt(QtWidgets.QWidget):
 
                 self.ui.tableView.setModel(stm)
 
-            if resp.status_code == 401:
+            elif resp.status_code == 401:
                 QtWidgets.QMessageBox.warning(
                     self,
                     "Внимание", "Нужно авторизоваться в системе, чтобы получить список всех дел",
@@ -186,8 +181,8 @@ class Login(QtWidgets.QWidget):
     def initUi(self):
         self.setWindowTitle("Авторизация")
         self.ui.pushButtonLogin.clicked.connect(self.onPushButtonLogin)
-        # self.shortcut = QtGui.QShortcut(QtGui.QKeySequence("Enter"), self)
-        # self.shortcut.activated.connect(self.onPushButtonLogin)
+        self.shortcut = QtGui.QShortcut(QtGui.QKeySequence("Enter"), self)
+        self.shortcut.activated.connect(self.onPushButtonLogin)
 
     def onPushButtonLogin(self):
         try:
@@ -200,15 +195,24 @@ class Login(QtWidgets.QWidget):
                 QtWidgets.QMessageBox.warning(self, "Поздравляем", "Вы вошли в систему!")
                 self.token = request.json()['token']
                 self.user.emit(dict_login["username"])
+                self.ui.lineEdit.clear()
+                self.ui.lineEdit_2.clear()
                 self.close()
             else:
                 QtWidgets.QMessageBox.warning(self, "Внимание", "Данные введены неправильно!")
+                self.ui.lineEdit.clear()
+                self.ui.lineEdit_2.clear()
         except requests.exceptions.ConnectionError:
             QtWidgets.QMessageBox.warning(
                 self,
                 "Внимание", "Нет соединения с сервером!",
                 QtWidgets.QMessageBox.Yes
             )
+
+    def closeEvent(self, event: QtGui.QCloseEvent) -> None:
+        self.ui.lineEdit.clear()
+        self.ui.lineEdit_2.clear()
+        event.accept()
 
 
 if __name__ == "__main__":
