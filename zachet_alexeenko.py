@@ -64,11 +64,40 @@ class DjangoWebQt(QtWidgets.QWidget):
         self.current_item = item.row()
 
     def onPushButtonNoteDelete(self):
-        id_todo = self.list_todo[self.current_item]["id"]
-        requests.delete(
-            f"{self.url}/api/v1/todo/{id_todo}/",
-            headers={'Authorization': "token {}".format(self.child_window.token)}
-        )
+        try:
+            id_todo = self.list_todo[self.current_item]["id"]
+            resp = requests.delete(
+                f"{self.url}/api/v1/todo/{id_todo}/",
+                headers={'Authorization': "token {}".format(self.child_window.token)}
+            )
+
+            if resp.status_code == 200:
+                self.onPushButtonNoteGetAll()
+
+            elif resp.status_code == 401:
+                QtWidgets.QMessageBox.warning(
+                    self,
+                    "Внимание", "Нужно авторизоваться в системе",
+                    QtWidgets.QMessageBox.Yes
+                )
+            elif resp.status_code == 403:
+                QtWidgets.QMessageBox.warning(
+                    self,
+                    "Внимание", "Заметку может удалить только автор",
+                    QtWidgets.QMessageBox.Yes
+                )
+            else:
+                QtWidgets.QMessageBox.warning(
+                    self,
+                    "Внимание", "Что-то пошло не так, повторите попытку",
+                    QtWidgets.QMessageBox.Yes
+                )
+        except requests.exceptions.ConnectionError:
+            QtWidgets.QMessageBox.warning(
+                self,
+                "Внимание", "Нет соединения с сервером!",
+                QtWidgets.QMessageBox.Yes
+            )
         self.onPushButtonNoteGetAll()
 
     def onPushButtonNoteDetail(self):
@@ -96,7 +125,6 @@ class DjangoWebQt(QtWidgets.QWidget):
             self.detail_window.ui.checkBox_importance.setChecked(False)
         else:
             self.detail_window.ui.checkBox_importance.setChecked(True)
-
 
         self.detail_window.show()
 
